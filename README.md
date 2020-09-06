@@ -27,4 +27,13 @@ Alive Beacon送信プログラムによって送信されたパケットが受�
 
     make albsender
     make install.sender
+    IF systemctl THEN
+      cp albsender.service /etc/systemd/system
+      systemctl enable albsender
+      systemctl start albsender
+    ELSE
+      /etc/rc.d/init.d/*****
+    ENDIF
+
+
 
