@@ -1,0 +1,12 @@
+[Unit]
+Description = A Live Beacon Sender
+After = rc-local.service
+
+[Service]
+ExecStart = /usr/local/bin/albsender 61.127.249.153 7290 XXX/XXX/DIR
+Restart = always
+Type = simple
+
+[Install]
+WantedBy = multi-user.target
+
