@@ -1,5 +1,3 @@
-PROGRAM = albsender
-SOURCE  = albsender.c
 
 albsender: albsender.o
 	cc -O3 -o albsender albsender.o
@@ -7,8 +5,11 @@ albsender: albsender.o
 albsender.o: albsender.c
 	cc -c albsender.c
 
-albreceiver: albreceiver.o
-	cc -O3 -o albreceiver albreceiver.o
+init.o: init.c
+	cc -c init.c
+
+albreceiver: albreceiver.o init.o
+	cc -O3 -o albreceiver albreceiver.o init.o
 
 albreceiver.o: albreceiver.c
 	cc -c albreceiver.c

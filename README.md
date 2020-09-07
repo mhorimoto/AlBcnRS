@@ -13,12 +13,12 @@ Alive Beacon送信プログラムによって送信されたパケットが受�
     IP_ADDRESS,ID,DELAY,DIR,COMMENT
 
  - IP_ADDRESS: IPアドレス
- - ID: ホスト自身が通知してくるID
- - DELAY: 何回受信できなければ異常にするかを指定する
+ - ID: 送信側が送信してくるID
+ - DELAY: 何秒受信できなければ異常にするかを指定する
  - DIR: サーバのある場所をディレクトリ構成で指定する
  - COMMENT: コメント
 
-    211.124.5.34,HMD1CON,3,/ACN/K/HMD,HIMEDO
+    211.124.5.34,HMD1CON,5,/ACN/K/HMD,HIMEDO
 
 
 ## Sender
