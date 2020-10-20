@@ -14,6 +14,7 @@
 #define False 0
 #define True  1
 #define CFGFILENAME "/usr/local/etc/host.cfg"
+#define LOGFILENAME "/var/log/albreceiver.log"
 
 extern ALB_cfghost *cptr,*ptr,*start_cfghost ;
 extern void init_table(void);
@@ -24,7 +25,7 @@ void abrt_handler(int sig);
 /* extern int rep(char *, const char *, const char *, const char *); */
 
 int main(int argc, char* argv[]) {
-  const char* optstring = "vi:p:";
+  const char* optstring = "va:p:";
   int sd;
   struct sockaddr_in addr;
  
@@ -40,25 +41,26 @@ int main(int argc, char* argv[]) {
   int  rc;
   int  c;
   int  unknown;
-  int  opt_i,opt_p;
+  int  opt_a,opt_p;
   u_int yes = 1;
   time_t now,past;
   struct tm *tm_now;
+  FILE *lfp;
 
-  opt_i = False;
+  opt_a = False;
   opt_p = False;
   unknown = True;
 
   while((c=getopt(argc,argv,optstring))!=-1) {
     //    printf("opt=%c ",c);
-    if (c=='i') {
-      opt_i = True;
+    if (c=='a') {
+      opt_a = True;
       sprintf(ipa,"%s",optarg);
     } else if (c=='p') {
       opt_p = True;
       port = atoi(optarg);
     } else if (c=='v') {
-      printf("albreceiver Version 0.11\n");
+      printf("albreceiver Version 0.20\n");
       exit(0);
     }
   }
@@ -105,7 +107,13 @@ int main(int argc, char* argv[]) {
 	  ptr->status = 0;
 	  sprintf(ddd,"%04d-%02d-%02d",tm_now->tm_year+1900,tm_now->tm_mon+1,tm_now->tm_mday);
 	  sprintf(tod,"%02d:%02d:%02d",tm_now->tm_hour,tm_now->tm_min,tm_now->tm_sec);
-	  printf("%s %s %d DISCON %-16s %s\n",ddd,tod,now,ptr->ipa,ptr->dir);
+	  lfp = fopen(LOGFILENAME,"a");
+	  if (lfp!=NULL) {
+	    fprintf(lfp,"%s %s %d DISCON %-16s %s\n",ddd,tod,now,ptr->ipa,ptr->dir);
+	  } else {
+	    fprintf(stderr,"%s %s %d DISCON %-16s %s\n",ddd,tod,now,ptr->ipa,ptr->dir);
+	  }
+	  fclose(lfp);
 	}
 	ptr = ptr->nextp;
       }
@@ -128,7 +136,13 @@ int main(int argc, char* argv[]) {
 	    if (ptr->status==0) {
 	      sprintf(ddd,"%04d-%02d-%02d",tm_now->tm_year+1900,tm_now->tm_mon+1,tm_now->tm_mday);
 	      sprintf(tod,"%02d:%02d:%02d",tm_now->tm_hour,tm_now->tm_min,tm_now->tm_sec);
-	      printf("%s %s %d RECONN %-16s %s\n",ddd,tod,now,ptr->ipa,buf);
+	      lfp = fopen(LOGFILENAME,"a");
+	      if (lfp!=NULL) {
+		fprintf(lfp,"%s %s %d RECONN %-16s %s\n",ddd,tod,now,ptr->ipa,buf);
+	      } else {
+		fprintf(stderr,"%s %s %d RECONN %-16s %s\n",ddd,tod,now,ptr->ipa,buf);
+	      }
+	      fclose(lfp);
 	    }
 	    ptr->cnt = ptr->delay + 1;
 	    ptr->ptime = now;
@@ -141,7 +155,13 @@ int main(int argc, char* argv[]) {
       if (unknown==True) {
 	sprintf(ddd,"%04d-%02d-%02d",tm_now->tm_year+1900,tm_now->tm_mon+1,tm_now->tm_mday);
 	sprintf(tod,"%02d:%02d:%02d",tm_now->tm_hour,tm_now->tm_min,tm_now->tm_sec);
-	printf("%s %s %d UNKNOWN %-16s %s\n",ddd,tod,now,inet_ntoa(from_addr.sin_addr),buf);
+	lfp = fopen(LOGFILENAME,"a");
+	if (lfp!=NULL) {
+	  fprintf(lfp,"%s %s %d UNKNOWN %-16s %s\n",ddd,tod,now,inet_ntoa(from_addr.sin_addr),buf);
+	} else {
+	  fprintf(stderr,"%s %s %d UNKNOWN %-16s %s\n",ddd,tod,now,inet_ntoa(from_addr.sin_addr),buf);
+	}
+	fclose(lfp);
       }
     } else {
       if ( errno == EAGAIN ) {
