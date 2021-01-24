@@ -22,10 +22,39 @@ extern void init_table(void);
 volatile sig_atomic_t stopflag = 0;
 void abrt_handler(int sig);
 
-/* extern int rep(char *, const char *, const char *, const char *); */
-
 int main(int argc, char* argv[]) {
+  int  c,opt_a,opt_p,unknown;
+  char ipa[30];    // IP Address
+  int  port;       // PORT
   const char* optstring = "va:p:";
+  opt_a = False;
+  opt_p = False;
+  unknown = True;
+
+  while((c=getopt(argc,argv,optstring))!=-1) {
+  //    printf("opt=%c ",c);
+    if (c=='a') {
+      opt_a = True;
+      sprintf(ipa,"%s",optarg);
+    } else if (c=='p') {
+      opt_p = True;
+      port = atoi(optarg);
+    } else if (c=='v') {
+      printf("albreceiver Version 0.30\n");
+      exit(0);
+    }
+  }
+
+  //ここで子プロセスを生成し親は終了
+  if(daemon(0, 1) == 0) {
+    mainLoop(port,&ipa[0]);
+  } else {
+    printf("error\n");
+  }
+  return 0;
+}
+
+int mainLoop(int port, char *ipa) {
   int sd;
   struct sockaddr_in addr;
  
@@ -35,11 +64,10 @@ int main(int argc, char* argv[]) {
   char buf[2048];  // 受信バッファ
   char dbuf[2048]; // 表示バッファ
   char *ptrdbuf;
-  char ipa[30];    // IP Address
+  //char ipa[30];    // IP Address
   char ddd[11],tod[9];
-  int  port;       // PORT
+  //  int  port;       // PORT
   int  rc;
-  int  c;
   int  rtcnt;
   int  unknown;
   int  opt_a,opt_p;
@@ -52,19 +80,19 @@ int main(int argc, char* argv[]) {
   opt_p = False;
   unknown = True;
 
-  while((c=getopt(argc,argv,optstring))!=-1) {
-    //    printf("opt=%c ",c);
-    if (c=='a') {
-      opt_a = True;
-      sprintf(ipa,"%s",optarg);
-    } else if (c=='p') {
-      opt_p = True;
-      port = atoi(optarg);
-    } else if (c=='v') {
-      printf("albreceiver Version 0.22\n");
-      exit(0);
-    }
-  }
+  //  while((c=getopt(argc,argv,optstring))!=-1) {
+  //    //    printf("opt=%c ",c);
+  //    if (c=='a') {
+  //      opt_a = True;
+  //      sprintf(ipa,"%s",optarg);
+  //    } else if (c=='p') {
+  //      opt_p = True;
+  //      port = atoi(optarg);
+  //    } else if (c=='v') {
+  //      printf("albreceiver Version 0.22\n");
+  //      exit(0);
+  //    }
+  //  }
 
   /*  init_table(); */
   rtcnt = read_table(CFGFILENAME);

@@ -86,34 +86,34 @@ char *ipa[11] = {
   };
 
 
-void init_table(void) {
-  int i;
+/* void init_table(void) { */
+/*   int i; */
 
-  cptr = (ALB_cfghost *)NULL;
-  ptr = (ALB_cfghost *)NULL;
+/*   cptr = (ALB_cfghost *)NULL; */
+/*   ptr = (ALB_cfghost *)NULL; */
 
-  for (i=0;i<11;i++) {
-    cptr = (ALB_cfghost *)malloc(sizeof(ALB_cfghost));
-    cptr->nextp = (ALB_cfghost *)ptr;
-    cptr->delay = 3;
-    cptr->status = 1;
-    strncpy(cptr->name,name[i],30);
-    strncpy(cptr->dir, dir[i], 30);
-    strncpy(cptr->ipa, ipa[i], 16);
-    cptr->ip_addr = inet_addr(ipa[i]);
-    /*    */
-    ptr = cptr;
-  }
-  printf("created struct\n");
-  while(ptr) {
-    printf("===============\n");
-    printf("NAME:%s\n",ptr->name);
-    printf("DELAY:%d\n",ptr->delay);
-    printf("DIR: %s\n",ptr->dir);
-    printf("IP:  %s\n",ptr->ipa);
-    printf("IPX: %x\n",ptr->ip_addr);
-    ptr = ptr->nextp;
-  }
-  start_cfghost = cptr;
-}
+/*   for (i=0;i<11;i++) { */
+/*     cptr = (ALB_cfghost *)malloc(sizeof(ALB_cfghost)); */
+/*     cptr->nextp = (ALB_cfghost *)ptr; */
+/*     cptr->delay = 3; */
+/*     cptr->status = 1; */
+/*     strncpy(cptr->name,name[i],30); */
+/*     strncpy(cptr->dir, dir[i], 30); */
+/*     strncpy(cptr->ipa, ipa[i], 16); */
+/*     cptr->ip_addr = inet_addr(ipa[i]); */
+/*     /\*    *\/ */
+/*     ptr = cptr; */
+/*   } */
+/*   printf("created struct\n"); */
+/*   while(ptr) { */
+/*     printf("===============\n"); */
+/*     printf("NAME:%s\n",ptr->name); */
+/*     printf("DELAY:%d\n",ptr->delay); */
+/*     printf("DIR: %s\n",ptr->dir); */
+/*     printf("IP:  %s\n",ptr->ipa); */
+/*     printf("IPX: %x\n",ptr->ip_addr); */
+/*     ptr = ptr->nextp; */
+/*   } */
+/*   start_cfghost = cptr; */
+/* } */
   

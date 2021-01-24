@@ -6,6 +6,11 @@ Alive Beacon送信プログラムによって送信されたパケットが受�
 
 サーバ類の接続関係による判断は現在のところ人間の判断に委ねる。
 
+## albreceiverd
+
+ 受信プログラムのDaemon化したもの。
+
+
 ## 設定ファイル
 
     /etc/alb/config.init
