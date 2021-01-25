@@ -208,3 +208,20 @@ int mainLoop(int port, char *ipa) {
 void abrt_handler(int sig) {
   stopflag = 1;
 }
+
+void printout(time_t now,char *keymsg,char *buf) {
+  time_t now;
+  char ddd[11],tod[9];
+  struct tm *tm_now;
+  FILE *lfp;
+
+  sprintf(ddd,"%04d-%02d-%02d",tm_now->tm_year+1900,tm_now->tm_mon+1,tm_now->tm_mday);
+  sprintf(tod,"%02d:%02d:%02d",tm_now->tm_hour,tm_now->tm_min,tm_now->tm_sec);
+  lfp = fopen(LOGFILENAME,"a");
+  if (lfp!=NULL) {
+    fprintf(lfp,"%s %s %d RECONN %-16s %s\n",ddd,tod,now,ptr->ipa,buf);
+  } else {
+    fprintf(stderr,"%s %s %d RECONN %-16s %s\n",ddd,tod,now,ptr->ipa,buf);
+  }
+  fclose(lfp);
+}
